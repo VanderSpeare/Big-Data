@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: #7c7979;
+    color: #fff; 
+    padding: 10px;
+    text-align: left;
+}
+
+h1 {
+    margin: 0;
+}
+
+.container {
+    flex: 1;
+    display: flex;
+}
+.sidebar ul li {
+    margin-bottom: 60px; 
+}
+
+
+.sidebar {
+    background-color: #f4f4f4;
+    padding: 20px;
+    width: 250px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.sidebar a:hover {
+    color: #007bff;
+}
+
+.content {
+    padding: 20px;
+    flex: 1;
+}
+
+h1 {
+    color: #333;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+
+</style>
+<body>
+    <header>
+        <h1>WEBMOVIES</h1>
+    </header>
+    <div class="container">
+        <div class="sidebar">
+            <ul>
+                <li><a href="/statistics/overview">Thống kê tổng quan</a></li>
+                <li><a href="/statistics/genre">Thống kê theo Thể loại (Genre)</a></li>
+                <li><a href="/statistics/language">Thống kê Theo Ngôn ngữ (Language)</a></li>
+                <li><a href="/statistics/release-date">Thống kê Theo Ngày Phát hành (Release Date)</a></li>
+                <li><a href="/statistics/adult">Thống kê Theo Tuổi (Adult)</a></li>
+                <li><a href="/">Thoát</a></li>
+               
+
+
+            </ul>
+        </div>
+        <div class="content">
+            <h1>Thống kê tổng quan</h1>
+            <p><strong>Tổng số phim:</strong> <%= totalMovies %></p>
+           <p><strong>Tổng lượt xem của tất cả phim:</strong> <%= totalPopularity %></p>
+             <p><strong>Điểm trung bình lượt xem mỗi phim:</strong> <%= averagePopularity.toFixed(2) %></p>
+             <p><strong>Tổng số đánh giá của tất cả phim:</strong> <%= totalStats.totalVotes %></p>
+        </div>        
+    </div>
+
+    
+</body>
+</html>

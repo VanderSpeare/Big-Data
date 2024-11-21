@@ -1,0 +1,69 @@
+<!-- views/languageStatistics.ejs -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <!-- Các thẻ head đặt ở đây -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <style>
+    canvas {
+        width: 1000px; 
+        height: 150px; 
+        display: block;
+        margin: 20px auto; 
+      }
+      
+  </style>
+  <body>
+    <h1>Thống kê theo Ngôn Ngữ</h1>
+
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Ngôn Ngữ</th>
+          <th>Số Lượng Phim</th>
+          <th>Tổng Lượt Xem</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Hiển thị thống kê theo ngôn ngữ -->
+        <% languageStatistics.forEach((language) => { %>
+          <tr>
+            <td><%= language.language %></td>
+            <td><%= language.movieCount %></td>
+            <td><%= language.totalPopularity %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+
+    <!-- Thêm phần vẽ biểu đồ -->
+    <canvas id="languageChart" width="400" height="200"></canvas>
+    <script>
+      var ctx = document.getElementById('languageChart').getContext('2d');
+      const languageLabels = JSON.parse('<%- JSON.stringify(languageStatistics.map(lang => lang.language)) %>');
+const movieCounts = JSON.parse('<%- JSON.stringify(languageStatistics.map(lang => lang.movieCount)) %>');
+
+      var languageChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: languageLabels,
+          datasets: [{
+            label: 'Số Lượng Phim',
+            data: movieCounts,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

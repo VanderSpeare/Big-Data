@@ -1,0 +1,113 @@
+<!-- views/genreStatistics.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genre Statistics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<style>
+    canvas {
+        width: 1000px; 
+        height: 150px; 
+        display: block;
+        margin: 20px auto; 
+      }
+  </style>
+<body>
+    <h1>Thống kê theo Thể loại (Genre)</h1>
+
+    <% if (genreStatistics && genreStatistics.length > 0) { %>
+        <!-- Bảng Thống Kê -->
+        <table border="1">
+            <tr>
+                <th>Thể loại</th>
+                <th>Số lượng phim</th>
+                <th>Tổng lượt xem</th>
+            </tr>
+            <% genreStatistics.forEach(genre => { %>
+                <tr>
+                    <td><%= genre.genre %></td>
+                    <td><%= genre.movieCount %></td>
+                    <td><%= genre.totalPopularity.toFixed(2) %></td>
+                </tr>
+            <% }); %>
+        </table>
+
+        <!-- Biểu Đồ Cột -->
+        <canvas id="genreChart" width="300" height="100"></canvas>
+
+        <script>
+            // Dữ liệu thống kê từ server
+            const genreStatistics = JSON.parse('<%- JSON.stringify(genreStatistics || []) %>');
+            console.log('Genre Statistics:', genreStatistics);
+        
+            // Tách dữ liệu để vẽ biểu đồ
+            const genreLabels = genreStatistics.map(item => item.genre);
+            const movieCounts = genreStatistics.map(item => item.movieCount);
+            const totalPopularities = genreStatistics.map(item => item.totalPopularity);
+        
+            // Vẽ biểu đồ cột
+            const ctx = document.getElementById('genreChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: genreLabels,
+                    datasets: [
+                        {
+                            label: 'Số lượng phim',
+                            data: movieCounts,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Tổng lượt xem',
+                            data: totalPopularities,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true }
+                    }
+                }
+            });
+        </script>
+    <% } else { %>
+        <p>No data available for genre statistics.</p>
+    <% } %>
+</body>
+</html>
+<!-- Thống kê theo Thể loại (Genre):
+
+Hiển thị số lượng phim theo từng thể loại.
+Tính tổng lượt xem (popularity) cho từng thể loại.
+Thống kê Theo Ngôn ngữ (Language):
+
+Hiển thị số lượng phim theo từng ngôn ngữ.
+Tính tổng lượt xem cho từng ngôn ngữ.
+Thống kê Theo Ngày Phát hành (Release Date):
+
+Hiển thị số lượng phim phát hành trong từng khoảng thời gian (ngày, tháng, năm).
+Tính tổng lượt xem cho từng khoảng thời gian.
+
+
+Thống kê Theo Tuổi (Adult):
+
+Hiển thị số lượng phim cho người lớn và không phải người lớn.
+Tính tổng lượt xem cho cả hai loại.
+Thống kê Theo Tổng Đánh giá và Tổng Lượt xem:
+
+Hiển thị tổng số đánh giá và tổng lượt xem của toàn bộ bộ sưu tập phim.
+
+Thống kê Theo Năm Phát hành:
+
+Hiển thị số lượng phim phát hành trong mỗi năm.
+Tính tổng lượt xem cho từng năm. -->

@@ -1,0 +1,102 @@
+<!-- views/releaseDateStatistics.ejs -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <!-- Các thẻ head đặt ở đây -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start; /* Thêm dòng này để đẩy thông tin lên trên cùng */
+      width: 1800px;
+      margin: 0 auto;
+    }
+
+    .info {
+      flex: 1;
+    }
+
+    .chart {
+      flex: 1;
+    }
+
+    canvas {
+        width: 1000px; 
+        height: 1050px; 
+        display: block;
+        margin: 20px auto; 
+      }
+  </style>
+</head>
+<body>
+  <h1>Thống kê Theo Ngày Phát hành</h1>
+
+  <div class="container">
+    <!-- Phần thông tin -->
+    <div class="info">
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Ngày Phát hành</th>
+            <th>Số Lượng Phim</th>
+            <th>Tổng Lượt Xem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Hiển thị thống kê theo ngày phát hành -->
+          <% releaseDateStatistics.forEach((dateStats) => { %>
+            <tr>
+              <td><%= dateStats.date %></td>
+              <td><%= dateStats.movieCount %></td>
+              <td><%= dateStats.totalPopularity %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Phần biểu đồ -->
+    <div class="chart">
+      <canvas id="releaseDateChart" height="200"></canvas>
+    </div>
+  </div>
+
+  <script>
+    var ctx = document.getElementById('releaseDateChart').getContext('2d');
+    const releaseDateLabels = JSON.parse('<%- JSON.stringify(releaseDateStatistics.map(stats => stats.date)) %>');
+    const movieCounts = JSON.parse('<%- JSON.stringify(releaseDateStatistics.map(stats => stats.movieCount)) %>');
+    const popularityData = JSON.parse('<%- JSON.stringify(releaseDateStatistics.map(stats => stats.totalPopularity)) %>');
+
+    var releaseDateChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: releaseDateLabels,
+        datasets: [
+            {
+              label: 'Số Lượng Phim',
+              data: movieCounts,
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1,
+            },
+          {
+            label: 'Tổng Lượt Xem',
+            data: popularityData,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Website</title>
+</head>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            padding-top: 50px; /* Add padding-top to account for fixed navigation bar */
+        }
+
+        nav {
+            height: 100px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000; /* Set a high z-index to ensure it appears above other elements */
+        }
+
+        nav a.logo {
+            font-size: 1.5em;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            margin-right: 100px;
+        }
+
+        nav li {
+            margin: 0 8px;
+        }
+
+        nav a {
+            font-size: 1.2em;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 70px; /* Add margin-top to account for fixed navigation bar */
+        }
+
+        li {
+            flex: 1 0 calc(20% - 20px);
+            text-align: center;
+            padding: 8px;
+            box-sizing: border-box;
+            transition: transform 0.3s ease;
+        }
+
+        li:hover {
+            transform: scale(1.05);
+        }
+
+        h2 {
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 8px;
+            border-radius: 5px;
+        }
+
+        p {
+            margin: 4px 0;
+            font-size: 0.8em;
+            color: #555;
+        }
+        nav form {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            margin-right: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 500px; /* Adjust the width as needed */
+        }
+
+        button {
+            padding: 8px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        li {
+    position: relative;
+}
+
+.movie-actions {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+.movie-actions .actions {
+    display: flex;
+    gap: 8px; /* Khoảng cách giữa nút xóa và nút sửa */
+}
+form {
+    margin: 0; 
+}
+.dropdown-menu {
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+<body>
+    <nav>
+        <a class="logo" href="#">WEBMOVIES</a>
+        <form action="/" method="get">
+            <input type="text" placeholder="Tìm kiếm phim..." name="search">
+            <button type="submit">Tìm kiếm</button>
+        </form>
+        <ul>
+            <li><a href="/add-movie">Thêm phim</a></li>
+            <p style="color: #fff;font-size: 50px">|</p>
+            <li><a href="/statistics/overview">Thống kê</a></li> 
+            <p style="color: #fff;font-size: 50px">|</p>
+            <li class="nav-item dropdown">
+                <% if (nameAc) { %>
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= nameAc %></a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/logout" style="color: #fff;">Đăng xuất</a>
+                    </div>
+                <% } else { %>
+                    <a href="/login" class="nav-link">Đăng nhập</a>
+                <% } %>
+            </li> 
+            
+        </ul>
+    </nav>
+
+   
+    <ul>
+        <% movies.forEach(function(movie, index) { %>
+            <li>
+                <h2><%= movie.title %></h2>
+                
+                <div class="movie-actions">
+                    
+                    <div class="actions">
+                        <form method="get" action="/edit-movie/<%= encodeURIComponent(movie.title) %>">
+                            <button type="submit">Sửa</button>
+                        </form>
+                        <form method="post" action="/delete-movie/<%= encodeURIComponent(movie.title) %>">
+                            <button type="submit">Xóa</button>
+                        </form>
+                    </div>
+                </div>
+                <img src="https://image.tmdb.org/t/p/w500<%= movie.poster_path %>" alt="<%= movie.title %>">
+                <p><strong>Original Language:</strong> <%= movie.original_language %></p>
+                <p><strong>Original Title:</strong> <%= movie.original_title %></p>
+                <p><strong>Overview:</strong> <%= movie.overview %></p>
+                <p><strong>Popularity:</strong> <%= movie.popularity %></p>
+                <p><strong>Release Date:</strong> <%= movie.release_date %></p>
+                <p><strong>Vote Average:</strong> <%= movie.vote_average %></p>
+                <p><strong>Vote Count:</strong> <%= movie.vote_count %></p>
+            </li>
+            
+            
+        <% }); %>
+    </ul>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> 
+
+</body>
+</html>

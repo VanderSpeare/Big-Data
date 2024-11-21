@@ -1,0 +1,84 @@
+<!-- views/adultStatistics.ejs -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <!-- Các thẻ head đặt ở đây -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+</head>
+<style>
+    canvas {
+        width: 500px; 
+        height: 100px; 
+        display: block;
+        margin: 20px auto; 
+      }
+</style>
+<body>
+  <h1>Thống kê Theo Tuổi</h1>
+
+  <div class="container">
+    <!-- Phần thông tin -->
+    <div class="info">
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Loại</th>
+            <th>Số Lượng Phim</th>
+            <th>Tổng Lượt Xem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Hiển thị thống kê theo loại -->
+          <% adultStatistics.forEach((category) => { %>
+            <tr>
+              <td><%= category.category %></td>
+              <td><%= category.movieCount %></td>
+              <td><%= category.totalPopularity %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Phần biểu đồ -->
+    <div class="chart">
+      <canvas id="adultChart" height="200"></canvas>
+    </div>
+  </div>
+
+  <script>
+    var ctx = document.getElementById('adultChart').getContext('2d');
+    const adultLabels = JSON.parse('<%- JSON.stringify(adultStatistics.map(stats => stats.category)) %>');
+    const movieCounts = JSON.parse('<%- JSON.stringify(adultStatistics.map(stats => stats.movieCount)) %>');
+    const popularityData = JSON.parse('<%- JSON.stringify(adultStatistics.map(stats => stats.totalPopularity)) %>');
+
+    var adultChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: adultLabels,
+        datasets: [
+          {
+            label: 'Số Lượng Phim',
+            data: movieCounts,
+          },
+          {
+            label: 'Tổng Lượt Xem',
+            data: popularityData,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  </script>
+</body>
+</html>
